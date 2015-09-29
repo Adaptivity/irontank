@@ -48,6 +48,6 @@ public class IronTank {
 
 	@Mod.EventHandler
 	public void load(FMLInitializationEvent evt) {
-		GameRegistry.registerTileEntity(TileIronTank.class, "com.indemnity83.irontank.block.TileIronTank");
+		GameRegistry.registerTileEntity(TileIronTank.class, Reference.TILE_IRON_TANK);
 	}
 }
