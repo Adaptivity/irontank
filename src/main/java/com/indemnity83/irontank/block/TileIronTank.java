@@ -10,13 +10,13 @@ import buildcraft.core.lib.fluids.Tank;
 import buildcraft.factory.TileTank;
 
 public class TileIronTank extends TileTank {
-	
+
 	private IronTankType type;
-	
+
 	public void setCapacity(int tankVolume) {
 		this.tank.setCapacity(FluidContainerRegistry.BUCKET_VOLUME * tankVolume);
 	}
-	
+
 	public int getCapacity() {
 		return this.tank.getCapacity();
 	}
@@ -24,11 +24,11 @@ public class TileIronTank extends TileTank {
 	public void setType(IronTankType type) {
 		this.type = type;
 	}
-	
+
 	public IronTankType getType() {
 		return this.type;
 	}
-	
+
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
 		this.type = IronTankType.values()[data.getInteger("type")];
@@ -40,16 +40,15 @@ public class TileIronTank extends TileTank {
 	}
 
 	public TileIronTank applyUpgradeItem(ItemTankChanger itemTankChanger) {
-		if (!itemTankChanger.getType().canUpgrade(this.getType()))
-        {
-            return null;
-        }
-		
+		if (!itemTankChanger.getType().canUpgrade(this.getType())) {
+			return null;
+		}
+
 		TileIronTank newEntity = new TileIronTank();
 		newEntity.setCapacity(itemTankChanger.getType().getTarget().getTankVolume());
 		newEntity.setType(itemTankChanger.getType().getTarget());
 		newEntity.tank.setFluid(this.tank.getFluid());
-		
+
 		return newEntity;
 	}
 

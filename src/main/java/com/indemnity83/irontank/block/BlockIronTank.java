@@ -27,14 +27,14 @@ public class BlockIronTank extends BlockTank {
 	private String blockName;
 	private IIcon textureStackedSide;
 	private IronTankType type;
-	
+
 	public BlockIronTank(IronTankType type) {
 		super();
-		
+
 		this.type = type;
 		this.tankVolume = type.getTankVolume();
 		this.blockName = type.getBlockName();
-		
+
 		this.setBlockName(this.blockName);
 		this.setCreativeTab(IronTankTabs.MainTab);
 	}
@@ -45,14 +45,14 @@ public class BlockIronTank extends BlockTank {
 		tile.setType(this.type);
 		return tile;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister par1IconRegister) {
 		super.registerBlockIcons(par1IconRegister);
 		textureStackedSide = par1IconRegister.registerIcon("irontank:" + this.blockName + "/side_stacked");
 	}
-	
-	@SuppressWarnings({"all"})
+
+	@SuppressWarnings({ "all" })
 	public IIcon getIconAbsolute(IBlockAccess iblockaccess, int i, int j, int k, int side, int metadata) {
 		if (side >= 2 && iblockaccess.getBlock(i, j - 1, k) == this) {
 			return textureStackedSide;
@@ -60,47 +60,37 @@ public class BlockIronTank extends BlockTank {
 			return super.getIconAbsolute(side, metadata);
 		}
 	}
-	
-	public String getInternalName()
-    {
+
+	public String getInternalName() {
 		return this.blockName;
-    }
-	
-	public void addRecipe() 
-	{
-		for (String recipe : type.getRecipes())
-        {
-			String[] recipeSplit = new String[] { recipe.substring(0, 3), recipe.substring(3, 6), recipe.substring(6, 9) };
+	}
+
+	public void addRecipe() {
+		for (String recipe : type.getRecipes()) {
+			String[] recipeSplit = new String[] { recipe.substring(0, 3), recipe.substring(3, 6),
+					recipe.substring(6, 9) };
 			for (String material : type.getMatList()) {
 				Object targetMaterial = MaterialHelper.translateOreName(material);
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this), recipeSplit, 
-						't', targetMaterial, 
-						'g', "blockGlass", 
-						'0', new ItemStack(BuildCraftFactory.tankBlock, 1),
-						'1', new ItemStack(ModBlocks.ironTank, 1),
-						'2', new ItemStack(ModBlocks.goldTank, 1),
-						'3', new ItemStack(ModBlocks.diamondTank, 1),
-						'4', new ItemStack(ModBlocks.copperTank, 1),
-						'5', new ItemStack(ModBlocks.silverTank, 1),
-						'6', new ItemStack(ModBlocks.obsidianTank, 1)
-				));
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this), recipeSplit, 't', targetMaterial, 'g',
+						"blockGlass", '0', new ItemStack(BuildCraftFactory.tankBlock, 1), '1',
+						new ItemStack(ModBlocks.ironTank, 1), '2', new ItemStack(ModBlocks.goldTank, 1), '3',
+						new ItemStack(ModBlocks.diamondTank, 1), '4', new ItemStack(ModBlocks.copperTank, 1), '5',
+						new ItemStack(ModBlocks.silverTank, 1), '6', new ItemStack(ModBlocks.obsidianTank, 1)));
 			}
-        }
+		}
 	}
-	
+
 	@Override
-    public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
-    {
-       TileEntity worldTile = world.getTileEntity(x, y, z);
-       if (worldTile instanceof TileIronTank)
-       {
-    	   TileIronTank tile = (TileIronTank) worldTile;
-    	   if (tile.getType().isExplosionResistant())
-           {
-               return 10000f;
-           }
-       }
-       return super.getExplosionResistance(par1Entity, world, x, y, z, explosionX, explosionY, explosionZ);
-    }
+	public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX,
+			double explosionY, double explosionZ) {
+		TileEntity worldTile = world.getTileEntity(x, y, z);
+		if (worldTile instanceof TileIronTank) {
+			TileIronTank tile = (TileIronTank) worldTile;
+			if (tile.getType().isExplosionResistant()) {
+				return 10000f;
+			}
+		}
+		return super.getExplosionResistance(par1Entity, world, x, y, z, explosionX, explosionY, explosionZ);
+	}
 
 }
