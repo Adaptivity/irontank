@@ -49,31 +49,30 @@ public class ItemTankChanger extends ItemIronTank {
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int X, int Y, int Z, int side,
 			float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
+		if (world.isRemote) {
 			return false;
+		}
+
 		TileEntity worldTile = world.getTileEntity(X, Y, Z);
-		TileIronTank newIronTankTile;
+		TileTank curTankTile;
 		if (worldTile != null && worldTile instanceof TileIronTank) {
-			TileIronTank ironTankTile = (TileIronTank) worldTile;
-			newIronTankTile = ironTankTile.applyUpgradeItem(this);
-			if (newIronTankTile == null) {
+			curTankTile = (TileTank) worldTile;
+			if (!getType().canUpgrade(((TileIronTank) curTankTile).getType())) {
 				return false;
 			}
-
 		} else if (worldTile != null && worldTile instanceof TileTank) {
-			TileTank curTankTile = (TileTank) worldTile;
+			curTankTile = (TileTank) worldTile;
 			if (!getType().canUpgrade(IronTankType.GLASS)) {
 				return false;
 			}
-
-			newIronTankTile = new TileIronTank();
-			newIronTankTile.setCapacity(getType().getTarget().getTankVolume());
-			newIronTankTile.setType(getType().getTarget());
-			newIronTankTile.tank.setFluid(curTankTile.tank.getFluid());
-
 		} else {
 			return false;
 		}
+
+		TileIronTank newIronTankTile = new TileIronTank();
+		newIronTankTile.setCapacity(getType().getTarget().getTankVolume());
+		newIronTankTile.setType(getType().getTarget());
+		newIronTankTile.tank.setFluid(curTankTile.tank.getFluid());
 
 		world.setBlock(X, Y, Z, getType().getTarget().getBlock());
 		world.setTileEntity(X, Y, Z, newIronTankTile);
